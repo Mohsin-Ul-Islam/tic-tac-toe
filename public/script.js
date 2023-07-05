@@ -40,12 +40,6 @@ window.addEventListener('load', () => {
                 cell.classList.add('cell--zeroed');
             }
 
-            // check draw condition
-            if (board.every(idx => !isNaN(idx))) {
-                logEl.textContent = 'game drew!';
-                gameOver = true;
-                return;
-            }
 
             let primaryDiagonalSum = 0;
             let secondaryDiagonalSum = 0;
@@ -93,6 +87,13 @@ window.addEventListener('load', () => {
 
             if (primaryDiagonalSum == boardSize || secondaryDiagonalSum == boardSize) {
                 logEl.textContent = `Player 2 won!`
+                gameOver = true;
+                return;
+            }
+
+            // check draw condition
+            if (board.every(idx => !isNaN(idx))) {
+                logEl.textContent = 'game drew!';
                 gameOver = true;
                 return;
             }
