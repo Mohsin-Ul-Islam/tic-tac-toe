@@ -1,10 +1,10 @@
 let turn = 0;
+let boardSize = 3;
 
-const board = Array(9).fill(NaN);
+const board = Array(boardSize * boardSize).fill(NaN);
 const log = document.querySelector('#log');
 
-for (let i = 0; i < 9; i++) {
-    let cell = document.querySelector(`#cell-${i + 1}`);
+document.querySelectorAll(".cell").forEach((cell, i) => {
     cell.addEventListener('click', () => {
 
         // cell already occupied
@@ -32,18 +32,35 @@ for (let i = 0; i < 9; i++) {
         }
 
         // check win condition
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < boardSize; i++) {
 
             let rowSum = 0;
-            for (let j = 0; j < 3; j++) {
-                const idx = i * 3 + j;
-                rowSum += board[idx];
+            let colSum = 0;
+            let primaryDiagonalSum = 0;
+            let secondaryDiagonalSum = 0;
+
+            for (let j = 0; j < boardSize; j++) {
+
+                const rowIdx = i * boardSize + j;
+                const colIdx = j * boardSize + i;
+
+                rowSum += board[rowIdx];
+                colSum += board[colIdx];
+
+                if (i == j) {
+                    primaryDiagonalSum += board[rowIdx];
+                }
+
+                if (boardSize - 1 - i == j) {
+                    secondaryDiagonalSum += board[colIdx];
+                }
+
             }
 
-            if (rowSum == 0) {
+            if (rowSum == 0 || colSum == 0 || primaryDiagonalSum == 0 || secondaryDiagonalSum == 0) {
                 log.textContent = `Player 1 won!`
                 return;
-            } else if (rowSum == 3) {
+            } else if (rowSum == boardSize || colSum == boardSize || primaryDiagonalSum == boardSize || secondaryDiagonalSum == boardSize) {
                 log.textContent = `Player 2 won!`
                 return;
             }
@@ -53,6 +70,6 @@ for (let i = 0; i < 9; i++) {
         turn = (turn + 1) % 2;
         log.textContent = `Player ${turn + 1}'s turn`
 
-    });
-}
+    })
+})
 
